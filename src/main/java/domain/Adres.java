@@ -2,7 +2,7 @@ package domain;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "adres")
 public class Adres {
     @Id
     private int adres_id;

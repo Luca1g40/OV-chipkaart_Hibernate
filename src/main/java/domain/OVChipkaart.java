@@ -3,6 +3,7 @@ package domain;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity(name = "ov_chipkaart")
 public class OVChipkaart {
@@ -14,9 +15,17 @@ public class OVChipkaart {
     private int klasse;
     private double saldo;
     @ManyToOne
+    @JoinColumn(name = "reiziger_id",
+            foreignKey = @ForeignKey(name = "ov_chipkaart_reiziger_id_fkey")
+    )
     private Reiziger reiziger;
-    @Transient
-    private ArrayList<Product> products;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "ov_chipkaart_product",
+            joinColumns = { @JoinColumn(name = "kaart_nummer") },
+            inverseJoinColumns = { @JoinColumn(name = "product_nummer") }
+    )
+    private List<Product> products;
 
     public OVChipkaart(int kaartNummer, Date geldigTot, int klasse, double saldo, Reiziger reiziger) {
         this.kaartNummer = kaartNummer;
@@ -66,7 +75,7 @@ public class OVChipkaart {
         return saldo;
     }
 
-    public ArrayList<Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
