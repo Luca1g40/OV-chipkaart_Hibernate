@@ -64,14 +64,8 @@ public class ProductDAOHibernate extends BaseDAOHibernate implements ProductDAO 
     public List<Product> findByOvchipkaart(OVChipkaart ovChipkaart) throws HibernateException {
         List<Product> products = new ArrayList<>();
         try{
-//            Wat ik heb gedaan is van van een product de chipkaarten ophalen waar het nummer gelijk is aan het nummer van de chipkaart
-//            SELECT * FROM product WHERE
-//            Vervolgens heb k de producten opgehaald van die chipkaart waar je net op heb gejoind met nog een join waar je p.productnummer
-//            vergelijkt met het productnummer wat je hebt opgehaald
-//            En dan select alles van het product waar je als tweede op joins
-            products = sess.createQuery("FROM product p JOIN p.ovkaarten c " +
-                    "ON c.kaartNummer = " + ovChipkaart.getKaartNummer() + " " +
-                    "JOIN p.productNummer ON c.products WHERE ov_chipkaart = " + ovChipkaart.getKaartNummer()).list();
+            products = sess.createQuery("SELECT pp FROM product p JOIN p.ovkaarten c ON c.kaartNummer =" + ovChipkaart.getKaartNummer() +
+                    " JOIN product pp ON pp.productNummer = p.productNummer").list();
         }  catch (HibernateException exception) {
             exception.getMessage();
 
